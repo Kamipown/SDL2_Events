@@ -28,6 +28,8 @@ static SDL_Window	*new_window(const char *title, int x, int y, Uint32 flags)
 int					main(int argc, char *argv[])
 {
 	SDL_Window	*window;
+	SDL_Event	event;
+	int			run;
 
 	initialization(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	if (argc == 3)
@@ -37,7 +39,15 @@ int					main(int argc, char *argv[])
 		window = new_window("Yo", 800, 600, 0);
 		printf("You can use ./SDL_2_Windows 'width' 'height'\n");
 	}
-	SDL_Delay(1000);
+	run = 1;
+	while (run)
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.key.keysym.sym == SDLK_ESCAPE)
+				run = 0;
+		}
+	}
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return (EXIT_SUCCESS);
