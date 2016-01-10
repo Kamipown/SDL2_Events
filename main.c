@@ -3,6 +3,11 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
+typedef struct	s_inputs
+{
+	int		run;
+}				t_inputs;
+
 static void			initialization(Uint32 flags)
 {
 	SDL_SetMainReady();
@@ -25,11 +30,20 @@ static SDL_Window	*new_window(const char *title, int x, int y, Uint32 flags)
 	return (window);
 }
 
+static void			manage_events(SDL_Event *event, t_inputs *inputs)
+{
+		while (SDL_PollEvent(event))
+		{
+			if (event->key.keysym.sym == SDLK_ESCAPE)
+				inputs->run = 0;
+		}
+}
+
 int					main(int argc, char *argv[])
 {
 	SDL_Window	*window;
 	SDL_Event	event;
-	int			run;
+	t_inputs	inputs;
 
 	initialization(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	if (argc == 3)
@@ -39,14 +53,10 @@ int					main(int argc, char *argv[])
 		window = new_window("Yo", 800, 600, 0);
 		printf("You can use ./SDL_2_Windows 'width' 'height'\n");
 	}
-	run = 1;
-	while (run)
+	inputs.run = 1;
+	while (inputs.run)
 	{
-		while (SDL_PollEvent(&event))
-		{
-			if (event.key.keysym.sym == SDLK_ESCAPE)
-				run = 0;
-		}
+		manage_events(&event, &inputs);
 	}
 	SDL_DestroyWindow(window);
 	SDL_Quit();
