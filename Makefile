@@ -2,7 +2,10 @@ NAME = SDL2_Events
 
 FLG = -Wall -Wextra -Werror
 
-SRC = main.c
+SRC =	srcs/main.c \
+		srcs/initialization.c \
+		srcs/window.c \
+		srcs/events.c
 
 all: $(NAME)
 
